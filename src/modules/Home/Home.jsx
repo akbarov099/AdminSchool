@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import User from "../../assets/images/user.jpg";
 import useDarkModeStore from "../../Store/DarcModeStore";
 import useImageStore from "../../Store/useImageStore";
-import api from "../../utils/axiosInstance";
+import api from "../../utils/axiosInstance"; 
 
 export default function Home() {
   const { darkMode } = useDarkModeStore();
-  const { uploadImage } = useImageStore();
+  const { uploadImage, uploadedImageUrl } = useImageStore();
   const [formData, setFormData] = useState({
-    fullName: "",
+    full_name: "",
     subject: "",
-    role: "Teacher",
+    type: "Teacher",
   });
   const [selectedImage, setSelectedImage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [selectedResume, setSelectedResume] = useState(null);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -26,36 +26,51 @@ export default function Home() {
     setSelectedImage(e.target.files[0]);
   };
 
-  const handleSubmit = async (e) => {
+  const handleResumeChange = (e) => {
+    setSelectedResume(e.target.files[0]);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.fullName || !formData.subject) {
-      alert("Please fill all the fields");
-      return;
-    }
+    if (selectedImage) {
+      uploadImage(selectedImage).then((url) => {
+        console.log("Image uploaded successfully:", url);
 
-    setLoading(true);
-
-    try {
-      let imageUrl = null;
-      if (selectedImage) {
-        imageUrl = await uploadImage(selectedImage);
-      }
-
-      // Submit the form data along with the image URL
-      await api.post("/teachers/create", {
-        full_name: formData.fullName,
-        type: formData.role,
-        subject: formData.subject,
-        file: imageUrl, // Uploaded image URL
+        if (selectedResume) {
+          uploadImage(selectedResume).then((resumeUrl) => {
+            console.log("Resume uploaded successfully:", resumeUrl);
+            sendData(url, resumeUrl);
+          });
+        } else {
+          sendData(url, null); 
+        }
       });
-
-      alert("Teacher successfully created!");
-    } catch (error) {
-      console.error("Failed to create teacher:", error);
-      alert("Error creating teacher");
-    } finally {
-      setLoading(false);
+    } else {
+      if (selectedResume) {
+        uploadImage(selectedResume).then((resumeUrl) => {
+          console.log("Resume uploaded successfully:", resumeUrl);
+          sendData(null, resumeUrl); 
+        });
+      } else {
+        sendData(null, null); 
+      }
     }
+  };
+
+  const sendData = (imageUrl, resumeUrl) => {
+    const dataToSend = {
+      ...formData,
+      image: imageUrl || null, 
+      resume: resumeUrl || null, 
+    };
+
+    api.post("/teachers/create", dataToSend)
+      .then((response) => {
+        console.log("Teacher created successfully:", response.data);
+      })
+      .catch((error) => {
+        console.log("Error creating teacher:", error.response);
+      });
   };
 
   return (
@@ -63,14 +78,17 @@ export default function Home() {
       <div className="container">
         <div className={`${darkMode ? "home__wrapper-light" : "home__wrapper-dark"}`}>
           <form onSubmit={handleSubmit}>
-            <button type="submit" disabled={loading}>
-              {loading ? "Uploading..." : "Добавить"}
-            </button>
+            <button type="submit">Добавить</button>
             <div className="home__form__wrtapper">
-              <div className="home__form__left">
-                <img src={User} alt="home" />
-                <h4>Добавить фото</h4>
-                <input type="file" onChange={handleImageChange} />
+              <div className="home__form__wrtapper">
+                <div className="home__form__left">
+                  <img src={uploadedImageUrl || User} alt="home" />
+                  <h4>Добавить фото</h4>
+                  <input type="file" onChange={handleImageChange} />
+
+                  <h4>Добавить резюме</h4>
+                  <input type="file" onChange={handleResumeChange} />
+                </div>
               </div>
 
               <div className="home__form__right">
@@ -81,8 +99,8 @@ export default function Home() {
                       <label>Имя Фамилия</label>
                       <input
                         type="text"
-                        name="fullName"
-                        value={formData.fullName}
+                        name="full_name"
+                        value={formData.full_name}
                         onChange={handleInputChange}
                       />
                     </div>
@@ -98,8 +116,8 @@ export default function Home() {
                     <div className="home__form__info">
                       <label>Роль</label>
                       <select
-                        name="role"
-                        value={formData.role}
+                        name="type"
+                        value={formData.type}
                         onChange={handleInputChange}
                       >
                         <option value="Teacher">Teacher</option>
