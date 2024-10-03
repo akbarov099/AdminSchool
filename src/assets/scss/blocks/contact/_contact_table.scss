@@ -1,0 +1,91 @@
+.contact-review-light,
+.contact-review-dark {
+  margin-top: 40px;
+  h3 {
+    text-align: left;
+    font-size: 19px;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+  }
+  .contact-hero__reviews {
+    width: 100%;
+    max-height: 550px;
+    overflow-y: auto;
+    padding-right: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: all 0.4s ease-in-out;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .contact__Wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      width: 100%;
+      border-radius: 10px 10px;
+      border-left: 6px solid $blue_light;
+      padding: 10px;
+      margin: 0;
+      opacity: 0;
+      animation: fadeInUp 0.6s forwards;
+
+      .contact__icons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+       
+        .contact-edit,
+        .contact-delete {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 10px;
+          padding: 5px;
+        }
+
+        .contact-edit{
+          background: $light_orang2;
+          color: $orang;
+        }
+        .contact-delete {
+          background: $orang2;
+          color: $red;
+        }
+      }
+
+      p {
+        font-size: 18px;
+        font-weight: 400;
+        margin: 0;
+      }
+
+      cite {
+        font-size: 16px;
+        font-weight: 400;
+        display: block;
+        margin-top: 0.5rem;
+      }
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

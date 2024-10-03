@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: $nunito_fonts !important;
+}
+
+a {
+  text-decoration: none;
+  font-family: $nunito_fonts !important;
+}
+
+li {
+  list-style: none;
+  font-family: $nunito_fonts !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+  font-family: $nunito_fonts !important;
+}
+
+button{
+  font-family: $nunito_fonts !important;
+}
+
+input{
+  font-family: $nunito_fonts !important;
+}

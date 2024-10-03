@@ -1,0 +1,166 @@
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #000;
+  }
+  
+  .log {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    flex-wrap: wrap;
+    overflow: hidden;
+  }
+  
+  .log::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(#000, #0071ff, #000);
+    animation: animate 5s linear infinite;
+  }
+  
+  @keyframes animate {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+  
+  .log span {
+    position: relative;
+    display: block;
+    width: calc(6.25vw - 2px);
+    height: calc(6.25vw - 2px);
+    background: #181818;
+    z-index: 2;
+    transition: 1.5s;
+  }
+  
+  .log span:hover {
+    background: #0071ff;
+    transition: 0s;
+  }
+  
+  .signin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    background: #222;
+    z-index: 1000;
+    width: 400px;
+    padding: 40px;
+    border-radius: 4px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  }
+  
+  .signin .content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 40px;
+  }
+  
+  .signin .content h1 {
+    font-size: 2em;
+    color: #0071ff;
+    text-transform: uppercase;
+  }
+  
+  .signin .content .form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .inputBx {
+    position: relative;
+    width: 100%;
+  }
+
+  .inputBxx {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .inputBxx input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background: #333;
+    border: none;
+    outline: none;
+    padding: 14px 7.5px;
+    border: 4px;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1em;
+  }
+  
+  .inputBx input {
+    width: 100%;
+    background: #333;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    padding: 25px 10px 7.5px;
+    border: 4px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1em;
+  }
+  
+  .inputBx i {
+    position: absolute;
+    left: 0;
+    padding: 15px 10px;
+    font-style: normal;
+    color: #aaa;
+    transition: 0.5s;
+    pointer-events: none;
+  }
+  
+  .inputBx input:focus ~ i,
+  .inputBx input:valid ~ i {
+    transform: translateY(-7.5px);
+    font-size: 0.8em;
+    color: #fff;
+  }
+  
+  @media (max-width: 1400px) {
+    .log span {
+      width: calc(9vw - 2px);
+      height: calc(9vw - 2px);
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .log span {
+      width: calc(10vw - 2px);
+      height: calc(10vw - 2px);
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .log span {
+      width: calc(20vw - 2px);
+      height: calc(20vw - 2px);
+    }
+  }
+  
