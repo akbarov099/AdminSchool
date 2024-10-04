@@ -268,7 +268,7 @@
         }
       }
 
-      &-btns{
+      &-btns {
         .btns__1 {
           background: $white;
           color: black;
@@ -289,12 +289,68 @@
         }
       }
 
-      &-btns{
+      &-btns {
         .btns__1 {
           background: #323d4e;
           color: white;
         }
       }
+    }
+  }
+}
+
+.search__wrapper-light {
+  background: $white;
+
+  .search {
+    input {
+      background: $white;
+      border: 1px solid $white_light;
+      color: $black;
+    }
+    button {
+      border: 1px solid rgba($yellow_light, 0.25);
+    }
+  }
+}
+
+.search__wrapper-dark {
+  background: $black_dark;
+  .search {
+    input {
+      background: #323d4e;
+      border: 1px solid #cfcfcf1c;
+      color: $white;
+    }
+
+    button {
+      border: 1px solid #cfcfcf1c;
+    }
+  }
+}
+
+.home__all__list-light {
+  .teachers__card {
+    background-color: $white;
+
+    .teachers__info {
+      background: #f8f9fa;
+    }
+    .teachers__delete{
+      background-color: $white;
+      }
+  }
+}
+
+.home__all__list-dark {
+  .teachers__card {
+    background-color: $black_dark;
+    .teachers__info {
+      background: #323d4eb4;
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+    }
+    .teachers__delete{
+    background-color: #323d4ed6;
     }
   }
 }

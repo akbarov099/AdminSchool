@@ -1,0 +1,142 @@
+.home__all__list-light,
+.home__all__list-dark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 65px;
+  margin-top: 80px;
+}
+
+.teachers__card {
+  border-radius: 20px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 280px;
+  text-align: center;
+  position: relative;
+
+  .teachers__image {
+    position: relative;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      object-position: center;
+      border-bottom: none;
+      transition: transform 0.3s ease;
+      z-index: 1;
+      transform: scale(1);
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0);
+      z-index: 2;
+      transition: background 0.4s ease-in-out;
+    }
+
+    &:hover::before {
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+    }
+
+    .whatsapp-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      color: #128c7e;
+      z-index: 3;
+    }
+
+    &:hover .whatsapp-icon {
+      opacity: 1;
+    }
+  }
+
+  .teachers__info {
+    padding: 25px 15px;
+    border-radius: 0 0 20px 20px;
+    z-index: 2;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      font-weight: 600;
+      width: 250px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    p {
+      font-weight: 400;
+      font-size: 16px;
+      width: 250px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  .teachers__delete {
+    border-radius: 5px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.315);
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: 2px solid #cfcfcf1c;
+    color: $red;
+    z-index: 999;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.49);
+    }
+
+    &:hover .teachers__image {
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0);
+        z-index: 2;
+        transition: background 0.4s ease-in-out;
+      }
+
+      &:hover::before {
+        background: rgba(0, 0, 0, 0.7);
+      }
+
+      &:hover img {
+        transform: scale(1.05);
+      }
+    }
+  }
+}
