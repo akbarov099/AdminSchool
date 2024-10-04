@@ -1,47 +1,75 @@
 import React, { useState } from "react";
 import api from "../../utils/axiosInstance";
 import useDarkModeStore from "../../Store/DarcModeStore";
+import useImageStore from "../../Store/useImageStore"; // Import your image store
 import Event from "../../assets/images/events.png";
 
 export default function EventsAdd() {
   const { darkMode } = useDarkModeStore();
-
+  const { uploadImage } = useImageStore(); // Use image store
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false); // Track image upload status
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // Set the selected image file
+    const file = e.target.files[0];
+    setImage(file);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    if (!image) {
+      alert("Please select an image to upload.");
+      return;
+    }
+
+    setIsUploading(true);
+
+    // Upload the image first
+    const uploadedImage = await uploadImage(image);
+    setIsUploading(false);
+
+    if (!uploadedImage) {
+      alert("Image upload failed. Please try again.");
+      return;
+    }
+
     const formData = new FormData();
-    formData.append("title", title);  // Send title
-    formData.append("description", description);  // Send description
-    formData.append("image", image);  // Send image
-  
+    formData.append("title", title);
+    
+    // Construct the body with the description and uploaded image URL
+    const bodyContent = JSON.stringify({
+      description: description,
+      image: uploadedImage, // Use the uploaded image URL from the API response
+    });
+
+    formData.append("body", bodyContent);
+
     // Post data to the backend API
     api
       .post("/blog/create", formData, {
         headers: {
-          "Content-Type": "multipart/form-data", // Important for file uploads
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((response) => {
-        // Logging the received response
         console.log("Response data:", response.data);
         if (response.data.success) {
-          // Display success message
           alert("Blog created successfully!");
-  
-          // Accessing the response details (title, description, and image)
-          console.log("Title:", response.data.data.title);
-          console.log("Description:", response.data.data.description);
-          console.log("Image URL:", response.data.data.image);
-  
-          // Reset the form after successful submission
+
+          // Log the response data, including title and body
+          const blogData = response.data.data;
+          console.log("Title:", title); // Log the title
+          console.log("Description:", description); // Log the description
+          console.log("Image URL:", uploadedImage); // Log the uploaded image URL
+
+          // If the backend returns the title and body, log them
+          console.log("Response Title:", blogData.title); // Assuming the response includes this
+          console.log("Response Body:", blogData.body); // Assuming the response includes this
+
+          // Reset form fields
           setTitle("");
           setDescription("");
           setImage(null);
@@ -52,18 +80,15 @@ export default function EventsAdd() {
         alert("Failed to create blog.");
       });
   };
-  
 
   return (
     <section>
       <div className="container">
-        <div
-          className={`${
-            darkMode ? "events__add-light" : "events__add-dark"
-          }`}
-        >
+        <div className={`${darkMode ? "events__add-light" : "events__add-dark"}`}>
           <form onSubmit={handleSubmit}>
-            <button type="submit">Добавить</button>
+            <button type="submit" disabled={isUploading}>
+              {isUploading ? "Uploading..." : "Добавить"}
+            </button>
             <div className="events__form__wrtapper">
               <div className="events__form__left">
                 <div className="image-upload-wrapper">

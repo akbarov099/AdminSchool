@@ -1,32 +1,33 @@
 import React, { useState } from "react";
 import useDarkModeStore from "../../Store/DarcModeStore";
+import api from "../../utils/axiosInstance";
 
 export default function ContactAdd() {
   const { darkMode } = useDarkModeStore();
   const [fullName, setFullName] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const response = await fetch('https://api.39ortomekteb.info/api/contact/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name: fullName, message }),
+    api.post('/contact/create', {
+      name: fullName,
+      message,
+    })
+    .then((response) => {
+      if (response.data.success) {
+        setFullName("");
+        setMessage("");
+        alert('Malumot muvaffaqiyatli yuborildi!');
+      } else {
+        console.error(response.data.message);
+        alert('Xatolik yuz berdi: ' + response.data.message);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      alert('Xatolik yuz berdi: ' + (error.response ? error.response.data : error.message));
     });
-
-    const data = await response.json();
-
-    if (data.success) {
-      setFullName("");
-      setMessage("");
-      alert('Malumot muvaffaqiyatli yuborildi!');
-    } else {
-      console.error(data.message);
-      alert('Xatolik yuz berdi: ' + data.message);
-    }
   };
 
   return (
