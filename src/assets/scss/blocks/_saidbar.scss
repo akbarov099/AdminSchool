@@ -1,7 +1,7 @@
 .saidbar,
 .saidbar_dark {
   min-width: 300px;
-  height: 100vh;
+  min-height: 100vh;
   transition: min-width 0.3s ease;
 
   .logo {
