@@ -37,25 +37,22 @@ export default function HomeAdd() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (selectedImage) {
-      uploadImage(selectedImage).then((url) => {
-        if (selectedResume) {
-          uploadImage(selectedResume).then((resumeUrl) => {
-            sendData(url, resumeUrl);
-          });
-        } else {
-          sendData(url, null);
-        }
-      });
-    } else {
-      if (selectedResume) {
-        uploadImage(selectedResume).then((resumeUrl) => {
-          sendData(null, resumeUrl);
-        });
-      } else {
-        sendData(null, null);
-      }
+
+    // Check if both image and resume are selected
+    if (!selectedImage) {
+      alert("Пожалуйста, добавьте фото.");
+      return;
     }
+    if (!selectedResume) {
+      alert("Пожалуйста, добавьте резюме.");
+      return;
+    }
+
+    uploadImage(selectedImage).then((url) => {
+      uploadImage(selectedResume).then((resumeUrl) => {
+        sendData(url, resumeUrl);
+      });
+    });
   };
 
   const sendData = (imageUrl, resumeUrl) => {
@@ -74,6 +71,9 @@ export default function HomeAdd() {
           subject: "",
           type: "Teacher",
         });
+        setSelectedImage(null);
+        setSelectedResume(null);
+        setImagePreviewUrl(User);
       })
       .catch((error) => {
         alert("Error creating teacher:", error.response);
@@ -99,6 +99,7 @@ export default function HomeAdd() {
                     type="file"
                     onChange={handleImageChange}
                     className="hidden-file-input"
+                    required
                   />
                 </div>
               </div>
@@ -114,6 +115,7 @@ export default function HomeAdd() {
                         name="full_name"
                         value={formData.full_name}
                         onChange={handleInputChange}
+                        required
                       />
                     </div>
                     <div className="home__form__info">
@@ -123,6 +125,7 @@ export default function HomeAdd() {
                         name="subject"
                         value={formData.subject}
                         onChange={handleInputChange}
+                        required
                       />
                     </div>
                     <div className="home__form__info">
@@ -131,6 +134,7 @@ export default function HomeAdd() {
                         name="type"
                         value={formData.type}
                         onChange={handleInputChange}
+                        required
                       >
                         <option value="Teacher">Teacher</option>
                         <option value="Personal">Personal</option>
@@ -146,7 +150,11 @@ export default function HomeAdd() {
                         }`}
                       >
                         <p> Добавить PDF</p>
-                        <input type="file" onChange={handleResumeChange} />
+                        <input
+                          type="file"
+                          onChange={handleResumeChange}
+                          required
+                        />
                       </div>
                     </div>
                   </div>
