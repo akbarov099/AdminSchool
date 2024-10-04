@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import api from "../../utils/axiosInstance"; // Assuming you have axios instance set up
+import api from "../../utils/axiosInstance"; 
 
 export default function EventsAll() {
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [blogs, setBlogs] = useState([]); // Массив для хранения блогов
+  const [loading, setLoading] = useState(true); // Статус загрузки
+  const [error, setError] = useState(null); // Сообщение об ошибке
 
-  // Fetch all blogs when component is mounted
   useEffect(() => {
     api
       .get("/blog")
       .then((response) => {
-        console.log("Response data:", response.data);
-        setBlogs(response.data); // Assuming response.data is an array of blogs
+        // Извлекаем данные из ответа
+        if (response.data.success) {
+          setBlogs(response.data.data); 
+        }
         setLoading(false);
       })
       .catch((error) => {
@@ -22,32 +23,31 @@ export default function EventsAll() {
       });
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div>Loading...</div>; // Показать загрузку
+  if (error) return <div>{error}</div>; // Показать ошибку
 
   return (
     <section>
       <div className="container">
         <h1>All Events</h1>
         <div className="events-list">
-          {blogs.length > 0 ? (
-            blogs.map((blog) => (
-              <div key={blog._id} className="event-card">
-                <h2>{blog.title}</h2>
-                <p>{blog.body?.description || "No description available"}</p>
-                {blog.body?.image && (
-                  <img
-                    src={blog.body.image}
-                    alt={blog.title}
-                    className="event-image"
-                  />
-                )}
-                <small>Created at: {new Date(blog.createdAt).toLocaleString()}</small>
+          {blogs.map((blog, index) => {
+            let parsedBody;
+
+            try {
+              parsedBody = blog.body ? JSON.parse(blog.body) : {};
+            } catch (error) {
+              parsedBody = {};
+            }
+
+            return (
+              <div key={index} className="blog-item">
+                <h2>{blog.title}</h2> {/* Заголовок блога */}
+                <img src={parsedBody.image} alt="Blog" style={{ width: '100px', height: '100px' }} /> {/* Изображение блога */}
+                <p>{parsedBody.date}</p> {/* Дата блога, если есть */}
               </div>
-            ))
-          ) : (
-            <p>No events found</p>
-          )}
+            );
+          })}
         </div>
       </div>
     </section>

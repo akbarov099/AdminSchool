@@ -1,84 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import api from "../../utils/axiosInstance";
 import useDarkModeStore from "../../Store/DarcModeStore";
-import useImageStore from "../../Store/useImageStore"; // Import your image store
-import Event from "../../assets/images/events.png";
+import useImageStore from "../../Store/useImageStore";
 
 export default function EventsAdd() {
   const { darkMode } = useDarkModeStore();
-  const { uploadImage } = useImageStore(); // Use image store
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
-  const [isUploading, setIsUploading] = useState(false); // Track image upload status
+  const { uploadImage } = useImageStore();
+  const fileInputRef = useRef(null);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-  };
+  const [title, setTitle] = useState(""); // Состояние для title
+  const [date, setDate] = useState(""); // Состояние для date
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!image) {
-      alert("Please select an image to upload.");
-      return;
-    }
+    const file = fileInputRef.current.files[0];
+    if (file) {
+      uploadImage(file).then((uploadedUrl) => {
+        if (uploadedUrl) {
+          console.log('Загруженный URL:', uploadedUrl);
 
-    setIsUploading(true);
+          const requestBody = {
+            title: title,
+            body:  JSON.stringify({ image: uploadedUrl, date: date }),
+          };
 
-    // Upload the image first
-    const uploadedImage = await uploadImage(image);
-    setIsUploading(false);
+          console.log('Отправляемый объект:', requestBody);
 
-    if (!uploadedImage) {
-      alert("Image upload failed. Please try again.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("title", title);
-    
-    // Construct the body with the description and uploaded image URL
-    const bodyContent = JSON.stringify({
-      description: description,
-      image: uploadedImage, // Use the uploaded image URL from the API response
-    });
-
-    formData.append("body", bodyContent);
-
-    // Post data to the backend API
-    api
-      .post("/blog/create", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        console.log("Response data:", response.data);
-        if (response.data.success) {
-          alert("Blog created successfully!");
-
-          // Log the response data, including title and body
-          const blogData = response.data.data;
-          console.log("Title:", title); // Log the title
-          console.log("Description:", description); // Log the description
-          console.log("Image URL:", uploadedImage); // Log the uploaded image URL
-
-          // If the backend returns the title and body, log them
-          console.log("Response Title:", blogData.title); // Assuming the response includes this
-          console.log("Response Body:", blogData.body); // Assuming the response includes this
-
-          // Reset form fields
-          setTitle("");
-          setDescription("");
-          setImage(null);
+          api.post('/blog/create', requestBody)
+            .then(response => {
+              console.log('Успешный POST запрос:', response.data);
+            })
+            .catch(error => {
+              console.log('Ошибка POST запроса:', error.response);
+            });
         }
-      })
-      .catch((error) => {
-        console.error("Error creating blog:", error);
-        alert("Failed to create blog.");
       });
+    }
   };
 
   return (
@@ -86,22 +44,17 @@ export default function EventsAdd() {
       <div className="container">
         <div className={`${darkMode ? "events__add-light" : "events__add-dark"}`}>
           <form onSubmit={handleSubmit}>
-            <button type="submit" disabled={isUploading}>
-              {isUploading ? "Uploading..." : "Добавить"}
+            <button type="submit">
+              Добавить
             </button>
             <div className="events__form__wrtapper">
               <div className="events__form__left">
                 <div className="image-upload-wrapper">
-                  <img
-                    src={image ? URL.createObjectURL(image) : Event}
-                    alt="Preview"
-                    className="image-preview"
-                  />
                   <h4>Добавить фото</h4>
                   <input
                     type="file"
                     className="hidden-file-input"
-                    onChange={handleImageChange}
+                    ref={fileInputRef}
                     required
                   />
                 </div>
@@ -116,16 +69,16 @@ export default function EventsAdd() {
                         type="text"
                         name="title"
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={(e) => setTitle(e.target.value)} // Устанавливаем title
                         required
                       />
                     </div>
                     <div className="events__form__info">
-                      <label>Description</label>
-                      <textarea
-                        name="description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                      <label>Date</label>
+                      <input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)} // Устанавливаем date
                         required
                       />
                     </div>
@@ -138,4 +91,4 @@ export default function EventsAdd() {
       </div>
     </section>
   );
-}
+};
