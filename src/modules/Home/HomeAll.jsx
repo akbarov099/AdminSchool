@@ -30,7 +30,7 @@ export default function HomeAll({ formData, setFormData }) {
 
   const handleDelete = async (teacherId) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this teacher?"
+      "Вы уверены, что хотите удалить этого преподавателя?"
     );
     if (confirmDelete) {
       try {
@@ -38,10 +38,10 @@ export default function HomeAll({ formData, setFormData }) {
         setTeachers((prevTeachers) =>
           prevTeachers.filter((teacher) => teacher._id !== teacherId)
         );
-        alert("Teacher deleted successfully");
+        alert("Успешно удален");
       } catch (error) {
         console.error("Error deleting teacher:", error);
-        alert("Failed to delete the teacher");
+        alert("Не удалось удалить преподавателя");
       }
     }
   };
@@ -91,7 +91,7 @@ export default function HomeAll({ formData, setFormData }) {
                 >
                   <img
                     src={teacher.image || ""}
-                    alt={teacher.full_name || "Name not specified"}
+                    alt={teacher.full_name || "Имя не указано"}
                   />
                   <GrContactInfo className="whatsapp-icon" size={40} />
                 </div>
