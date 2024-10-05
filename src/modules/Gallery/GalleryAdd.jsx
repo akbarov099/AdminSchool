@@ -5,17 +5,17 @@ import Addphoto from "../../assets/images/addphoto.png";
 import api from "../../utils/axiosInstance";
 
 export default function GalleryAdd() {
-  const { darkMode } = useDarkModeStore();
-  const { uploadImage, uploadedImageUrl } = useImageStore();
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(Addphoto);
-  const [errorMessage, setErrorMessage] = useState("");
+  const { darkMode } = useDarkModeStore(); 
+  const { uploadImage, uploadedImageUrl } = useImageStore(); 
+  const [selectedImage, setSelectedImage] = useState(null); 
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(Addphoto); 
+  const [errorMessage, setErrorMessage] = useState(""); 
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setSelectedImage(file);
-      setImagePreviewUrl(URL.createObjectURL(file));
+      setSelectedImage(file); 
+      setImagePreviewUrl(URL.createObjectURL(file)); 
       setErrorMessage(""); 
     }
   };
@@ -26,6 +26,7 @@ export default function GalleryAdd() {
       alert("Пожалуйста, выберите изображение перед отправкой.");
       return; 
     }
+
     uploadImage(selectedImage).then((url) => {
       sendData(url);
     });
@@ -37,15 +38,16 @@ export default function GalleryAdd() {
     };
 
     api
-      .post("/gallery/create", dataToSend)
+      .post("/gallery/create", dataToSend) 
       .then((response) => {
-        alert("Изображение успешно добавлено:", response.data);
-        setImagePreviewUrl(Addphoto);
+        alert("Изображение успешно добавлено!"); 
+        setImagePreviewUrl(Addphoto); 
         setSelectedImage(null); 
+        window.location.reload(); 
       })
       .catch((error) => {
         const errorMsg = error.response ? error.response.data : error.message;
-        alert("Ошибка при добавлении изображения: " + errorMsg);
+        alert("Ошибка при добавлении изображения: " + errorMsg); 
       });
   };
 

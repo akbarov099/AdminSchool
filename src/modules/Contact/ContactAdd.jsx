@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import useDarkModeStore from "../../Store/DarcModeStore";
 import api from "../../utils/axiosInstance";
 
-export default function ContactAdd() {
+export default function ContactAdd({ onAdd }) { 
   const { darkMode } = useDarkModeStore();
   const [fullName, setFullName] = useState("");
   const [message, setMessage] = useState("");
@@ -16,9 +16,15 @@ export default function ContactAdd() {
     })
     .then((response) => {
       if (response.data.success) {
+        const newReview = {
+          _id: response.data.data._id, 
+          name: fullName,
+          message,
+        };
+        onAdd(newReview); 
         setFullName("");
         setMessage("");
-        alert('Отзыв успешно отправлена!');
+        alert('Отзыв успешно отправлен!');
       } else {
         console.error(response.data.message);
         alert('Произошла ошибка: ' + response.data.message);
@@ -33,11 +39,7 @@ export default function ContactAdd() {
   return (
     <section>
       <div className="container">
-        <div
-          className={`${
-            darkMode ? "contact__wrapper-light" : "contact__wrapper-dark"
-          }`}
-        >
+        <div className={`contact__wrapper ${darkMode ? "contact__wrapper-light" : "contact__wrapper-dark"}`}>
           <form onSubmit={handleSubmit}>
             <button type="submit">Добавить</button>
             <div className="contact__form__wrapper">

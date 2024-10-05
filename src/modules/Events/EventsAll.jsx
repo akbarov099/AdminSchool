@@ -1,25 +1,34 @@
+
+// EventsAll.jsx
 import React, { useEffect, useState } from "react";
 import api from "../../utils/axiosInstance";
 import { AiOutlineDelete } from "react-icons/ai";
-import EventsSearch from "./EventsSearch"; 
+import EventsSearch from "./EventsSearch";
+import useDarkModeStore from "../../Store/DarcModeStore";
 
 export default function EventsAll() {
   const [blogs, setBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(""); 
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const { darkMode } = useDarkModeStore();
+  
   useEffect(() => {
     const fetchBlogs = async () => {
-      const response = await api.get("/blog");
-      if (response.data.success) {
-        setBlogs(response.data.data);
-        setFilteredBlogs(response.data.data); 
-      } else {
-        setError("Failed to fetch blogs");
+      try {
+        const response = await api.get("/blog");
+        if (response.data.success) {
+          setBlogs(response.data.data);
+          setFilteredBlogs(response.data.data);
+        } else {
+          setError("Failed to fetch blogs");
+        }
+      } catch (error) {
+        setError("Error fetching blogs. Please try again later.");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchBlogs();
@@ -27,13 +36,17 @@ export default function EventsAll() {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this blog?")) {
-      const response = await api.delete(`/blog/delete/${id}`);
-      if (response.data.success) {
-        setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
-        setFilteredBlogs((prevBlogs) =>
-          prevBlogs.filter((blog) => blog._id !== id)
-        );
-      } else {
+      try {
+        const response = await api.delete(`/blog/delete/${id}`);
+        if (response.data.success) {
+          setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
+          setFilteredBlogs((prevBlogs) =>
+            prevBlogs.filter((blog) => blog._id !== id)
+          );
+        } else {
+          setError("Failed to delete blog. Please try again.");
+        }
+      } catch (error) {
         setError("Failed to delete blog. Please try again.");
       }
     }
@@ -47,18 +60,20 @@ export default function EventsAll() {
       );
       setFilteredBlogs(filtered);
     } else {
-      setFilteredBlogs(blogs); 
+      setFilteredBlogs(blogs);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="spinner">Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <section>
-        <EventsSearch onSearch={handleSearch} /> 
+      <EventsSearch onSearch={handleSearch} />
       <div className="container">
-        <div className="events-list">
+        <div
+          className={`${darkMode ? "events-list-light" : "events-list-dark"}`}
+        >
           {filteredBlogs.length > 0 ? (
             filteredBlogs.map((blog) => {
               const parsedBody = blog.body
@@ -69,12 +84,9 @@ export default function EventsAll() {
 
               return (
                 <div key={blog._id} className="blog-item">
-                  <img
-                    src={parsedBody.image || "default-image.jpg"}
-                    alt="Blog"
-                  />
-                  <p>{parsedBody.date || "No date available"}</p>
-                  <h2>{blog.title}</h2>
+                  <img src={parsedBody.image} alt={blog.title} />
+                  <h3>{blog.title}</h3>
+                  <p>{parsedBody.date}</p>
                   <button onClick={() => handleDelete(blog._id)}>
                     <AiOutlineDelete />
                   </button>
@@ -82,7 +94,7 @@ export default function EventsAll() {
               );
             })
           ) : (
-            <div>No blogs found for "{searchQuery}"</div>
+            <div>No blogs found</div>
           )}
         </div>
       </div>

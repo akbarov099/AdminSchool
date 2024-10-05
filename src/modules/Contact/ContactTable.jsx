@@ -5,6 +5,7 @@ import { MdEdit } from "react-icons/md";
 import useDarkModeStore from "../../Store/DarcModeStore";
 import { MdDelete } from "react-icons/md";
 import ModalUpdate from "../../Components/ModalUpdate"; 
+import ContactAdd from "./ContactAdd"; 
 
 export default function ContactTable() {
   const [reviews, setReviews] = useState([]);
@@ -16,8 +17,11 @@ export default function ContactTable() {
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const { darkMode } = useDarkModeStore();
 
-
   useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  const fetchReviews = () => {
     api
       .get("/contact")
       .then((response) => {
@@ -34,7 +38,7 @@ export default function ContactTable() {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  };
 
   const handleDeleteClick = (review) => {
     setSelectedReview(review);
@@ -88,11 +92,14 @@ export default function ContactTable() {
         console.error("Error updating review:", error);
         alert("Error updating review. Please try again.");
       });
-};
+  };
 
+  const handleAddReview = (newReview) => {
+    setReviews((prevReviews) => [...prevReviews, newReview]);
+  };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="container">Loading...</div>;
   }
 
   if (error) {
@@ -101,12 +108,9 @@ export default function ContactTable() {
 
   return (
     <>
+      <ContactAdd onAdd={handleAddReview} /> 
       <div className="container">
-        <div
-          className={`${
-            darkMode ? "contact-review-light" : "contact-review-dark"
-          }`}
-        >
+        <div className={`contact-review ${darkMode ? "contact-review-light" : "contact-review-dark"}`}>
           <h3>Отзывы</h3>
           <div className="contact-hero__reviews">
             {reviews.length > 0 ? (

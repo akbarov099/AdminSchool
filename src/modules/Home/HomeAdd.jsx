@@ -4,19 +4,14 @@ import useDarkModeStore from "../../Store/DarcModeStore";
 import useImageStore from "../../Store/useImageStore";
 import api from "../../utils/axiosInstance";
 
-export default function HomeAdd() {
+export default function HomeAdd({ formData, setFormData }) {
   const { darkMode } = useDarkModeStore();
   const { uploadImage } = useImageStore();
-  const [formData, setFormData] = useState({
-    full_name: "",
-    subject: "",
-    type: "Teacher",
-  });
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedResume, setSelectedResume] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(User);
-  const [resumeAddedMessage, setResumeAddedMessage] = useState("Добавить резюме"); 
-
+  const [resumeAddedMessage, setResumeAddedMessage] =
+    useState("Добавить резюме");
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -36,7 +31,7 @@ export default function HomeAdd() {
     const file = e.target.files[0];
     if (file) {
       setSelectedResume(file);
-      setResumeAddedMessage("Резюме добавлено!"); 
+      setResumeAddedMessage("Резюме добавлено!");
     }
   };
 
@@ -78,7 +73,7 @@ export default function HomeAdd() {
         setSelectedImage(null);
         setSelectedResume(null);
         setImagePreviewUrl(User);
-        setResumeAddedMessage("Добавить резюме"); 
+        setResumeAddedMessage("Добавить резюме");
       })
       .catch((error) => {
         alert("Учитель, создающий ошибку:", error.response);
@@ -99,9 +94,7 @@ export default function HomeAdd() {
               <div className="home__form__left">
                 <div className="image-upload-wrapper">
                   <img src={imagePreviewUrl} alt="home" />
-                  <h4>
-                    {selectedImage ? "Фото добавлено!" : "Добавить фото"}
-                  </h4>
+                  <h4>{selectedImage ? "Фото добавлено!" : "Добавить фото"}</h4>
                   <input
                     type="file"
                     onChange={handleImageChange}
@@ -148,7 +141,7 @@ export default function HomeAdd() {
                       </select>
                     </div>
                     <div className="home__form__info">
-                      <h4>{resumeAddedMessage}</h4> 
+                      <h4>{resumeAddedMessage}</h4>
                       <div
                         className={`${
                           darkMode
@@ -156,7 +149,11 @@ export default function HomeAdd() {
                             : "home__input__file-dark"
                         }`}
                       >
-                        <p>{selectedResume ? "Резюме добавлено!" : "Добавить PDF"}</p> 
+                        <p>
+                          {selectedResume
+                            ? "Резюме добавлено!"
+                            : "Добавить PDF"}
+                        </p>
                         <input
                           type="file"
                           onChange={handleResumeChange}

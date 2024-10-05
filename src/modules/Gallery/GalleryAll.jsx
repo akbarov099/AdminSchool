@@ -4,7 +4,7 @@ import useDarkModeStore from "../../Store/DarcModeStore";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CardActionArea } from "@mui/material";
 
-export default function GalleryAll() {
+export default function GalleryAll({}) {
   const [galleryItems, setGalleryItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

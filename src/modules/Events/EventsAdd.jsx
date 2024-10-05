@@ -51,10 +51,8 @@ export default function EventsAdd() {
               .then((response) => {
                 setSuccessMessage("Событие успешно добавлено!");
                 alert("Событие успешно добавлено!");
-                setTitle("");
-                setDate("");
-                setImagePreview(img);
-                fileInputRef.current.value = ""; 
+                // Refresh the page after the alert
+                window.location.reload();
               })
               .catch((error) => {
                 console.log("POST request error:", error.response);

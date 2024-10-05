@@ -6,9 +6,9 @@ import Global from './Global';
 export default function HomePage() {
   const token = useTokenStore((state) => state.token); 
 
-  if (token) {
-    return <Global />;
+  if (!token) {
+    return <Login />;
   }
 
-  return <Login />;
+  return <Global />;
 }

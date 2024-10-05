@@ -336,9 +336,6 @@
     .teachers__info {
       background: #f8f9fa;
     }
-    .teachers__delete{
-      background-color: $white;
-      }
   }
 }
 
@@ -349,13 +346,8 @@
       background: #323d4eb4;
       box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
     }
-    .teachers__delete{
-    background-color: #323d4ed6;
-    }
   }
 }
-
-
 
 .events__add-light {
   background: $white;
@@ -429,7 +421,6 @@
   }
 }
 
-
 .photo__all__wrapper-light {
   background: $white;
   form {
@@ -445,5 +436,17 @@
     button {
       border: 1px solid #cfcfcf1c;
     }
+  }
+}
+
+.events-list-light {
+  .blog-item {
+    background-color: #f8f9fa;
+  }
+}
+
+.events-list-dark {
+  .blog-item {
+    background-color: $black_dark;
   }
 }
