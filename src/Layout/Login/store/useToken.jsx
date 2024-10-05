@@ -16,7 +16,7 @@ const useTokenStore = create((set) => ({
       localStorage.removeItem("token");
       set({ token: "" });
       window.location.href = "/";
-    }, 1200); 
+    }, 12000000); 
   },
 }));
 

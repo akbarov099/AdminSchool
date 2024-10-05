@@ -163,4 +163,10 @@
       height: calc(20vw - 2px);
     }
   }
-  
+
+  .error-text{
+    color: $red;
+    font-size: 22px;
+    font-weight: 400;
+    text-align: center;
+  }
