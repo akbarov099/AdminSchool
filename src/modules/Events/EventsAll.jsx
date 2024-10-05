@@ -64,7 +64,7 @@ export default function EventsAll() {
     }
   };
 
-  if (loading) return <div className="spinner">Loading...</div>;
+  if (loading) return <div className="container">Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (

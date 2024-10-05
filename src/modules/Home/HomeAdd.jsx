@@ -141,7 +141,7 @@ export default function HomeAdd({ formData, setFormData }) {
                       </select>
                     </div>
                     <div className="home__form__info">
-                      <h4>{resumeAddedMessage}</h4>
+                      <label>{resumeAddedMessage}</label>
                       <div
                         className={`${
                           darkMode

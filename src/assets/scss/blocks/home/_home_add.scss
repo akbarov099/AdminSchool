@@ -13,8 +13,8 @@
       height: 40px;
       border-radius: 12px;
       padding-left: 10px;
-      font-size: 16px;
-      font-weight: 400;
+      font-size: 18px;
+      font-weight: 500;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -65,7 +65,7 @@
         h4 {
           color: $blue;
           text-align: center;
-          font-size: 14px;
+          font-size: 18px;
           font-weight: 400;
           margin-top: 14px;
           cursor: pointer;
@@ -84,9 +84,10 @@
           align-items: start;
 
           h2 {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 30px;
+            font-weight: 700;
             transition: all 0.5s ease-in-out;
+            letter-spacing: 2px;
           }
 
           .home__form__data {
@@ -101,9 +102,11 @@
               gap: 5px;
 
               label {
-                font-size: 14px;
-                font-weight: 400;
+                font-size: 22px;
+                font-weight: 600;
+                margin-bottom: 10px;
                 transition: all 0.5s ease-in-out;
+                letter-spacing: 1px;
               }
 
               input {

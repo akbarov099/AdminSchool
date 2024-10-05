@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import api from "../../utils/axiosInstance";
 import useDarkModeStore from "../../Store/DarcModeStore";
 import useImageStore from "../../Store/useImageStore";
-import img from "../../assets/images/events.png";
+import img from "../../assets/images/addphoto.png";
 
 export default function EventsAdd() {
   const { darkMode } = useDarkModeStore();
@@ -51,7 +51,6 @@ export default function EventsAdd() {
               .then((response) => {
                 setSuccessMessage("Событие успешно добавлено!");
                 alert("Событие успешно добавлено!");
-                // Refresh the page after the alert
                 window.location.reload();
               })
               .catch((error) => {
@@ -101,7 +100,7 @@ export default function EventsAdd() {
                 <div className="events__form__right-top">
                   <div className="events__form__data">
                     <div className="events__form__info">
-                      <label>Title</label>
+                      <label>Информация</label>
                       <input
                         type="text"
                         name="title"
@@ -111,7 +110,7 @@ export default function EventsAdd() {
                       />
                     </div>
                     <div className="events__form__info">
-                      <label>Date</label>
+                      <label>Дата</label>
                       <input
                         type="date"
                         value={date}
