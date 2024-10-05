@@ -39,13 +39,13 @@ export default function GalleryAdd() {
     api
       .post("/gallery/create", dataToSend)
       .then((response) => {
-        alert("Image added successfully:", response.data);
+        alert("Изображение успешно добавлено:", response.data);
         setImagePreviewUrl(Addphoto);
         setSelectedImage(null); 
       })
       .catch((error) => {
         const errorMsg = error.response ? error.response.data : error.message;
-        alert("Error adding image: " + errorMsg);
+        alert("Ошибка при добавлении изображения: " + errorMsg);
       });
   };
 
@@ -63,7 +63,7 @@ export default function GalleryAdd() {
               <div className="phot__form__img">
                 <label htmlFor="imageUpload">
                   <img src={imagePreviewUrl} alt="Add" />
-                  <h4>{selectedImage ? "Добавлена фотография" : "Добавить фото"}</h4>
+                  <h4>{selectedImage ? "Фото добавлено!" : "Добавить фото"}</h4>
                 </label>
                 <input
                   type="file"

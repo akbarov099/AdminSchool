@@ -18,15 +18,15 @@ export default function ContactAdd() {
       if (response.data.success) {
         setFullName("");
         setMessage("");
-        alert('Malumot muvaffaqiyatli yuborildi!');
+        alert('Отзыв успешно отправлена!');
       } else {
         console.error(response.data.message);
-        alert('Xatolik yuz berdi: ' + response.data.message);
+        alert('Произошла ошибка: ' + response.data.message);
       }
     })
     .catch((error) => {
       console.error(error);
-      alert('Xatolik yuz berdi: ' + (error.response ? error.response.data : error.message));
+      alert('Произошла ошибка: ' + (error.response ? error.response.data : error.message));
     });
   };
 

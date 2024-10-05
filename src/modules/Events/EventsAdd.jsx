@@ -2,40 +2,70 @@ import React, { useState, useRef } from "react";
 import api from "../../utils/axiosInstance";
 import useDarkModeStore from "../../Store/DarcModeStore";
 import useImageStore from "../../Store/useImageStore";
+import img from "../../assets/images/events.png";
 
 export default function EventsAdd() {
   const { darkMode } = useDarkModeStore();
   const { uploadImage } = useImageStore();
   const fileInputRef = useRef(null);
 
-  const [title, setTitle] = useState(""); // Состояние для title
-  const [date, setDate] = useState(""); // Состояние для date
+  const [title, setTitle] = useState(""); 
+  const [date, setDate] = useState(""); 
+  const [imagePreview, setImagePreview] = useState(img);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [imageAddedMessage, setImageAddedMessage] = useState(""); 
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const previewURL = URL.createObjectURL(file);
+      setImagePreview(previewURL);
+      setImageAddedMessage(""); 
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setErrorMessage("");
+    setSuccessMessage("");
+    setImageAddedMessage("");
+
+    if (!title || !date || !fileInputRef.current.files[0]) {
+      setErrorMessage("Пожалуйста, заполните все поля и загрузите изображение.");
+      return;
+    }
 
     const file = fileInputRef.current.files[0];
     if (file) {
-      uploadImage(file).then((uploadedUrl) => {
-        if (uploadedUrl) {
-          console.log('Загруженный URL:', uploadedUrl);
+      uploadImage(file)
+        .then((uploadedUrl) => {
+          if (uploadedUrl) {
+            setImageAddedMessage("Фото добавлено!"); 
+            const requestBody = {
+              title: title,
+              body: JSON.stringify({ image: uploadedUrl, date: date }),
+            };
 
-          const requestBody = {
-            title: title,
-            body:  JSON.stringify({ image: uploadedUrl, date: date }),
-          };
-
-          console.log('Отправляемый объект:', requestBody);
-
-          api.post('/blog/create', requestBody)
-            .then(response => {
-              console.log('Успешный POST запрос:', response.data);
-            })
-            .catch(error => {
-              console.log('Ошибка POST запроса:', error.response);
-            });
-        }
-      });
+            api.post("/blog/create", requestBody)
+              .then((response) => {
+                setSuccessMessage("Событие успешно добавлено!");
+                alert("Событие успешно добавлено!");
+                setTitle("");
+                setDate("");
+                setImagePreview(img);
+                fileInputRef.current.value = ""; 
+              })
+              .catch((error) => {
+                console.log("POST request error:", error.response);
+                setErrorMessage("При добавлении события произошла ошибка.");
+              });
+          }
+        })
+        .catch(() => {
+          setErrorMessage("Ошибка загрузки изображения.");
+          alert("Ошибка загрузки изображения.");
+        });
     }
   };
 
@@ -44,17 +74,26 @@ export default function EventsAdd() {
       <div className="container">
         <div className={`${darkMode ? "events__add-light" : "events__add-dark"}`}>
           <form onSubmit={handleSubmit}>
-            <button type="submit">
-              Добавить
-            </button>
+            <button type="submit">Добавить</button>
+
             <div className="events__form__wrtapper">
               <div className="events__form__left">
                 <div className="image-upload-wrapper">
-                  <h4>Добавить фото</h4>
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="Preview" />
+                  ) : (
+                    <img src="" alt="Изображение не выбрано" />
+                  )}
+                  <h4>
+                    {imagePreview && imagePreview !== img
+                      ? "Фото добавлено!"
+                      : "Добавить фото"}
+                  </h4>
                   <input
                     type="file"
                     className="hidden-file-input"
                     ref={fileInputRef}
+                    onChange={handleImageChange}
                     required
                   />
                 </div>
@@ -69,7 +108,7 @@ export default function EventsAdd() {
                         type="text"
                         name="title"
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)} // Устанавливаем title
+                        onChange={(e) => setTitle(e.target.value)} 
                         required
                       />
                     </div>
@@ -78,7 +117,7 @@ export default function EventsAdd() {
                       <input
                         type="date"
                         value={date}
-                        onChange={(e) => setDate(e.target.value)} // Устанавливаем date
+                        onChange={(e) => setDate(e.target.value)} 
                         required
                       />
                     </div>
@@ -91,4 +130,4 @@ export default function EventsAdd() {
       </div>
     </section>
   );
-};
+}
