@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://api.39ortomekteb.info/api',
+    baseURL: 'https://schoolbackend-rrc4.onrender.com/api',
 });
 
 api.interceptors.request.use(

@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-// vite.config.js
-export default {
+export default defineConfig({
+  plugins: [react()],
   server: {
     proxy: {
       '/api': {
@@ -11,6 +11,12 @@ export default {
         changeOrigin: true,
         secure: false,
       },
+      '/images': {  // Optional: to handle CORS for images from static.bbk.kg
+        target: 'https://static.bbk.kg',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/images/, ''),
+      },
     },
   },
-};
+});

@@ -50,9 +50,8 @@ export default function HomeAll({ formData, setFormData }) {
     () =>
       teachers.filter(
         (teacher) =>
-          teacher.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (teacher.subject &&
-            teacher.subject.toLowerCase().includes(searchQuery.toLowerCase()))
+          (teacher.full_name && teacher.full_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+          (teacher.subject && teacher.subject.toLowerCase().includes(searchQuery.toLowerCase()))
       ),
     [teachers, searchQuery]
   );
